@@ -1,6 +1,6 @@
 
 #######################################################
-# Clean: FAO Locust Data
+# Setup: Test Dataset
 #######################################################
 
 #######################################################
@@ -14,7 +14,6 @@ today <- Sys.Date()
 today <- format(today, format = "%y%m%d")
 
 # Set Working Directory
-user <- Sys.info()["user"]
 if (user == "ryanm") {
     # Ryan 
     setwd("C:/Users/ryanm/Dropbox (Personal)/Locust")
@@ -35,25 +34,25 @@ library(sf)
 
 
 #######################################################
-# 01: Import FAO Locust Data
+# 01: Merge Sentiel and Locust data
 #######################################################
 
-# Bring in raw locust data
+# Bring in clean WDPA data
+
+# Bring in clean Sentiel data
+
+# Merge the two datasets
 
 #######################################################
 # 02: Clean Data
 #######################################################
 
-# Only keep needed variables 
-
-# Remove problematic observations
-
-# Create generally useful information (dummies)
+# Create measures of greeniness (for land)
 
 
 
 #######################################################
-# 03: Save Cleaned Data
+# 03: Save Setup Data
 #######################################################
 
 # Save 
