@@ -28,33 +28,44 @@ if (user == "") {
 # Library
 #######################################################
 
+# Import Data 
+library(rio)
 # Cleaning Data 
 library(data.table)
 # Spatial Data 
 library(sf)
+# Plot Maps
+library(tmap)
 
 
 #######################################################
 # 01: Import FAO Locust Data
 #######################################################
 
-# Bring in raw locust data
+# Bring in raw adult locust data
+sf_locust <- sf::read_sf("./data/raw/fao_locust_hub/fao_adults_sf/")
+
+# Convert to data.table for cleaning
 
 #######################################################
 # 02: Clean Data
 #######################################################
 
 # Only keep needed variables 
+sf_locust[, c("CAT","") := NULL]
+
+# Rename variable names
 
 # Remove problematic observations
 
 # Create generally useful information (dummies)
 
 
-
 #######################################################
 # 03: Save Cleaned Data
 #######################################################
 
-# Save 
+# Restore as sf objection prior to export. (use default projection from raw data)
 
+# Save 
+st_write(sf_locust,"./data/clean/locust/sf_locust.gdb" )
