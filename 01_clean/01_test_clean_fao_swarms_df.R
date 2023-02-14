@@ -47,6 +47,10 @@ sf_locust <- sf::read_sf("./data/raw/fao_locust_hub/fao_swarms_sf/")
     # Check CRS
     st_crs(sf_locust) # "EPSG",4326
 
+    # CHECK: Visualize information
+    # tmap_mode("view")
+    tm_shape(sf_locust) + tm_basemap(leaflet::providers$OpenStreetMap) + tm_dots()
+    
 # TODO: Consider if any of the other FAO information is useful or needed. Or if we should only be focusing on the swarms (or adult population). 
 # TODO: Perhaps hoppers (which are not swarms) could be used as an IV. And the ecological data needs to be processed as a potential IV measure as well. 
 
@@ -76,6 +80,13 @@ df_locust <- df_locust[, c("OBJECTID", "STARTDATE", "FINISHDATE", "EXACTDATE", "
 # Create generally useful information (dummies)
 
     # TODO: Create variable for Year, Month, Date
+    df_locust[, year := year(FINISHDATE)]
+    df_locust[, month := month(FINISHDATE)]
+    # df_locust[, day := day(FINISHDATE)] 
+        # TODO: Figure out the day variable
+
+# TODO: For now, only keep Kenya to work on 
+df_locust <- df_locust[COUNTRYID == "KE"]
 
 #######################################################
 # 03: Save Cleaned Data
@@ -85,6 +96,11 @@ df_locust <- df_locust[, c("OBJECTID", "STARTDATE", "FINISHDATE", "EXACTDATE", "
 sf_locust <- st_as_sf(df_locust)
 st_crs(sf_locust) <- 4326
     
-# Save 
-st_write(sf_locust,"./data/clean/locust/sf_locust.gdb" )
+# Save Tabular Data 
+write.csv(df_locust, 
+          file = "./data/clean/locust/df_locust")
+
+# Save Geometries
+sf_locust <- sf_locust[, c("OBJECTID")]
+st_write(sf_locust,"./data/clean/locust/sf_locust.shp" )
     # TODO: Issue with writing out the GBD
