@@ -36,6 +36,7 @@ library(data.table)
 library(sf)
 # Plot Maps
 library(tmap)
+library(leaflet)
 
 
 #######################################################
@@ -46,9 +47,13 @@ library(tmap)
 sf_locust <- sf::read_sf("./data/raw/fao_locust_hub/fao_swarms_sf/")
     # Check CRS
     st_crs(sf_locust) # "EPSG",4326
-
+    # Exploring Height Dimension 
+    st_z_range(sf_locust) 
+        # NOTE: Seems to be a reading in issue. 
+    # Remove Z deminsion
+    sf_locust <- st_zm(sf_locust, drop = T)
     # CHECK: Visualize information
-    # tmap_mode("view")
+    tmap_mode("view")
     tm_shape(sf_locust) + tm_basemap(leaflet::providers$OpenStreetMap) + tm_dots()
     
 # TODO: Consider if any of the other FAO information is useful or needed. Or if we should only be focusing on the swarms (or adult population). 
@@ -79,7 +84,7 @@ df_locust <- df_locust[, c("OBJECTID", "STARTDATE", "FINISHDATE", "EXACTDATE", "
 
 # Create generally useful information (dummies)
 
-    # TODO: Create variable for Year, Month, Date
+    # Create variable for Year, Month, Date
     df_locust[, year := year(FINISHDATE)]
     df_locust[, month := month(FINISHDATE)]
     # df_locust[, day := day(FINISHDATE)] 
@@ -95,12 +100,13 @@ df_locust <- df_locust[COUNTRYID == "KE"]
 # Restore as sf objection prior to export. (use default projection from raw data)
 sf_locust <- st_as_sf(df_locust)
 st_crs(sf_locust) <- 4326
-    
+    # TODO: Need to clip the extent to only include the remaining points + 5 KM buffer
+    # st_bbox(c(xmin = 10, xmax = 60, ymax = 10, ymin = -4.254))
+sf_locust 
 # Save Tabular Data 
-write.csv(df_locust, 
-          file = "./data/clean/locust/df_locust")
+write.csv(df_locust,
+          file = "./data/clean/locust/df_locust.csv")
 
 # Save Geometries
 sf_locust <- sf_locust[, c("OBJECTID")]
-st_write(sf_locust,"./data/clean/locust/sf_locust.shp" )
-    # TODO: Issue with writing out the GBD
+st_write(sf_locust,"./data/clean/locust/sf_locust.shp")
