@@ -99,7 +99,7 @@ df_locust <- df_locust[COUNTRYID == "KE"]
 
 # Restore as sf objection prior to export. (use default projection from raw data)
 sf_locust <- st_as_sf(df_locust)
-st_crs(sf_locust) <- 4326
+sf_locust <- st_transform(sf_locust, 4326)
     # TODO: Need to clip the extent to only include the remaining points + 5 KM buffer
     # st_bbox(c(xmin = 10, xmax = 60, ymax = 10, ymin = -4.254))
 sf_locust 

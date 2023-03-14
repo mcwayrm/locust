@@ -28,13 +28,34 @@ if (user == "") {
 # Library
 #######################################################
 
-# Import Sentiel Data 
-library(sen2r)
+# Use Google Earth Engine
+library(rgee)
+    # Needs to be run once to establish on local R directory 
+    # ee_install(py_env = "rgee")
+    # Will need to install Google Cloud CLI as well 
+    # https://cloud.google.com/sdk/docs/install
+library(googleAuthR)
+library(googleCloudStorageR)
+
+# Spatial Objects 
+library(sf)
 
 
 #######################################################
 # 01: Import Sentiel Data
 #######################################################
+
+# Determine bounding box 
+sf_locust <- read_sf("./data/clean/locust/sf_locust.shp")
+
+# Set up Google Earth Engine 
+ee_Initialize(user = "mcway005@umn.edu",  drive = T, gcs = T)
+
+# API Code 
+gee_code <- readLines("./access_codes/")
+ee_Authenticate(authorization_code = gee_code)
+
+
 
 # Import
 
