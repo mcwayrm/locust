@@ -110,3 +110,5 @@ write.csv(df_locust,
 # Save Geometries
 sf_locust <- sf_locust[, c("OBJECTID")]
 st_write(sf_locust,"./data/clean/locust/sf_locust.shp")
+
+
